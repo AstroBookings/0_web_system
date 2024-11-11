@@ -1,6 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { LoginDto } from '@models/login.dto';
 import LoginFormComponent from './login-form.component';
+import { LoginService } from './login.service';
 
+/**
+ * LoginPage
+ * - Routed component for login
+ * @requires LoginService
+ */
 @Component({
   selector: 'lab-login',
   standalone: true,
@@ -8,7 +15,20 @@ import LoginFormComponent from './login-form.component';
   imports: [LoginFormComponent],
   template: `
     <h1>🔐 Login</h1>
-    <lab-login-form />
+    <lab-login-form (login)="onLogin($event)" />
   `,
 })
-export default class LoginPage {}
+export default class LoginPage {
+  private service = inject(LoginService);
+
+  /**
+   * On login event
+   * @param dto - LoginDto
+   */
+  onLogin(dto: LoginDto) {
+    console.log('onLogin', dto);
+    this.service.login(dto).subscribe((res) => {
+      console.log('onLogin res', res);
+    });
+  }
+}
