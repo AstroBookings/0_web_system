@@ -1,17 +1,20 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './core/layout/header.component';
 
+/**
+ * AppComponent
+ * - Root component
+ * - Contains the header and the router outlet
+ */
 @Component({
   selector: 'lab-root',
   standalone: true,
-  imports: [RouterOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterOutlet, HeaderComponent],
   template: `
-    <h1>Welcome to {{title}}!</h1>
-
+    <lab-header />
     <router-outlet />
   `,
-  styles: [],
 })
-export class AppComponent {
-  title = '0_web_system';
-}
+export class AppComponent {}
