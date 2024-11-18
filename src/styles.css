@@ -4,3 +4,7 @@ body {
 span {
   margin-right: 0.5rem;
 }
+
+input.ng-invalid {
+  border: 1px solid rgb(175, 66, 64);
+}

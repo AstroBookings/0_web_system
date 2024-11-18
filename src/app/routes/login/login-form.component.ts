@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  output,
+  signal,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { LoginDto } from '@models/login.dto';
 import { ControlBlock } from '@ui/control.block';
 
@@ -10,22 +16,39 @@ import { ControlBlock } from '@ui/control.block';
   selector: 'lab-login-form',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ControlBlock],
+  imports: [FormsModule, ControlBlock],
   template: `
-    <form>
+    <form #form="ngForm">
       <fieldset>
         <div>
-          <lab-control controlName="email">
-            <input type="email" id="email" name="email" />
+          <lab-control [control]="emailControl">
+            <input
+              [(ngModel)]="email"
+              #emailControl="ngModel"
+              type="email"
+              id="email"
+              name="email"
+              required
+              email
+            />
           </lab-control>
         </div>
         <div>
-          <lab-control controlName="password">
-            <input type="password" id="password" name="password" />
+          <lab-control [control]="passwordControl">
+            <input
+              [(ngModel)]="password"
+              #passwordControl="ngModel"
+              type="password"
+              id="password"
+              name="password"
+              required
+            />
           </lab-control>
         </div>
       </fieldset>
-      <button type="button" (click)="onLoginClick()">Login</button>
+      <button type="button" (click)="onLoginClick()" [disabled]="form.invalid">
+        Login
+      </button>
     </form>
   `,
 })
@@ -35,6 +58,16 @@ export default class LoginFormComponent {
    * - Emits a LoginDto
    */
   login = output<LoginDto>();
+
+  /**
+   * Email
+   */
+  email = signal<string>('');
+
+  /**
+   * Password
+   */
+  password = signal<string>('');
 
   /**
    * On login click
