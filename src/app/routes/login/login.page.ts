@@ -1,9 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { LoginDto } from '@models/login.dto';
-import {
-  LogService,
-  provideLogService,
-} from 'src/app/shared/services/log.service';
+import { LogService, provideLog } from 'src/app/shared/services/log.service';
 import LoginFormComponent from './login-form.component';
 import { LoginService } from './login.service';
 
@@ -15,9 +12,9 @@ import { LoginService } from './login.service';
 @Component({
   selector: 'lab-login',
   standalone: true,
+  providers: [provideLog('🔐 Login Page')],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LoginFormComponent],
-  providers: [provideLogService('LoginPage')],
   template: `
     <h1>🔐 Login</h1>
     <lab-login-form (login)="onLogin($event)" />

@@ -19,7 +19,7 @@ import { titleCase } from '../utils/string.utils';
       <label [for]="controlName()">{{ labelCaption() }}</label>
       <ng-content></ng-content>
       @if (control().errors) {
-      <small>{{ control().errors | json }}</small>
+        <small>{{ control().errors | json }}</small>
       }
     </div>
   `,
@@ -50,6 +50,6 @@ export class ControlBlock {
    * Computed signal for label caption
    */
   labelCaption: Signal<string> = computed(
-    () => this.label() || titleCase(this.controlName())
+    () => this.label() || titleCase(this.controlName()),
   );
 }
