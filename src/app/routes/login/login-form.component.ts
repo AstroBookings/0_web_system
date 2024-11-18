@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   output,
+  OutputEmitterRef,
   signal,
+  WritableSignal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoginDto } from '@models/login.dto';
@@ -57,26 +59,27 @@ export default class LoginFormComponent {
    * On login event
    * - Emits a LoginDto
    */
-  login = output<LoginDto>();
+  login: OutputEmitterRef<LoginDto> = output<LoginDto>();
 
   /**
    * Email
    */
-  email = signal<string>('');
+  email: WritableSignal<string> = signal<string>('');
 
   /**
    * Password
    */
-  password = signal<string>('');
+  password: WritableSignal<string> = signal<string>('');
 
   /**
    * On login click
    */
   onLoginClick() {
-    console.log('onLoginClick');
-    this.login.emit({
-      email: 'test@test.com',
-      password: 'password',
-    });
+    const loginDto: LoginDto = {
+      email: this.email(),
+      password: this.password(),
+    };
+    console.log('onLoginClick', loginDto);
+    this.login.emit(loginDto);
   }
 }

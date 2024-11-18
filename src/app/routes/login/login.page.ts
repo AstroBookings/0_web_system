@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { LoginDto } from '@models/login.dto';
+import {
+  LogService,
+  provideLogService,
+} from 'src/app/shared/services/log.service';
 import LoginFormComponent from './login-form.component';
 import { LoginService } from './login.service';
 
@@ -13,12 +17,14 @@ import { LoginService } from './login.service';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LoginFormComponent],
+  providers: [provideLogService('LoginPage')],
   template: `
     <h1>🔐 Login</h1>
     <lab-login-form (login)="onLogin($event)" />
   `,
 })
 export default class LoginPage {
+  private logService = inject(LogService);
   private service = inject(LoginService);
 
   /**
@@ -26,9 +32,9 @@ export default class LoginPage {
    * @param dto - LoginDto
    */
   onLogin(dto: LoginDto) {
-    console.log('onLogin', dto);
+    this.logService.log('onLogin', dto);
     this.service.login(dto).subscribe((res) => {
-      console.log('onLogin res', res);
+      this.logService.log('onLogin res', res);
     });
   }
 }
