@@ -52,7 +52,7 @@ import { PasswordValidatorDirective } from '@ui/password-validator.directive';
             id="confirmPassword"
             name="confirmPassword"
             required
-            minlength="4"
+            minlength="6"
           />
         </lab-control>
         <lab-control [control]="roleControl">
@@ -63,7 +63,7 @@ import { PasswordValidatorDirective } from '@ui/password-validator.directive';
           </select>
         </lab-control>
       </fieldset>
-      <button type="button" (click)="sendRegisterDto()" [disabled]="form.invalid">Register</button>
+      <button type="button" (click)="submitRegisterDto()" [disabled]="form.invalid">Register</button>
     </form>
   `,
 })
@@ -124,7 +124,7 @@ export default class RegisterFormComponent {
   /**
    * On register click event handler
    */
-  protected sendRegisterDto() {
+  protected submitRegisterDto() {
     const registerDto: RegisterDto = {
       name: this.name(),
       email: this.email(),
