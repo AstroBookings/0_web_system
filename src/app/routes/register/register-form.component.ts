@@ -13,6 +13,7 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { RegisterDto } from '@models/register.dto';
 import { Role } from '@models/role.enum';
 import { ControlBlock } from '@ui/control.block';
+import { PasswordValidatorDirective } from '@ui/password-validator.directive';
 
 /**
  * RegisterFormComponent
@@ -21,7 +22,7 @@ import { ControlBlock } from '@ui/control.block';
 @Component({
   selector: 'lab-register-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule, ControlBlock],
+  imports: [FormsModule, ControlBlock, PasswordValidatorDirective],
   template: `
     <form #form="ngForm">
       <fieldset>
@@ -40,6 +41,7 @@ import { ControlBlock } from '@ui/control.block';
             name="password"
             required
             minlength="4"
+            labPasswordValidator
           />
         </lab-control>
         <lab-control [control]="confirmPasswordControl">
@@ -69,12 +71,12 @@ export default class RegisterFormComponent {
   /**
    * Name
    */
-  protected readonly name: WritableSignal<string> = signal<string>('');
+  protected readonly name: WritableSignal<string> = signal<string>('lab');
 
   /**
    * Email
    */
-  protected readonly email: WritableSignal<string> = signal<string>('');
+  protected readonly email: WritableSignal<string> = signal<string>('lab@lab.com');
 
   /**
    * Password
@@ -97,6 +99,9 @@ export default class RegisterFormComponent {
    */
   protected readonly confirmPasswordControl: Signal<NgModel> = viewChild.required<NgModel>('confirmPasswordControl');
 
+  /**
+   * Validation implementation as an effect
+   */
   private passwordMatchValidatorEffect = effect(() => {
     // signal triggers
     const confirmPasswordControl = this.confirmPasswordControl();
