@@ -7,17 +7,18 @@ import { LoginService } from './login.service';
 /**
  * LoginPage
  * - Routed component for login
- * @requires LoginService
+ * @requires LoginService - to send the login request
+ * @requires LogService - to log the login process
  */
 @Component({
-    selector: 'lab-login',
-    providers: [provideLog('🔐 Login Page')],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [LoginFormComponent],
-    template: `
+  selector: 'lab-login',
+  providers: [provideLog('🔐 Login Page')],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [LoginFormComponent],
+  template: `
     <h1>🔐 Login</h1>
     <lab-login-form (login)="onLogin($event)" />
-  `
+  `,
 })
 export default class LoginPage {
   private logService = inject(LogService);
@@ -27,7 +28,7 @@ export default class LoginPage {
    * On login event
    * @param dto - LoginDto
    */
-  onLogin(dto: LoginDto) {
+  protected onLogin(dto: LoginDto) {
     this.logService.log('onLogin', dto);
     this.service.login(dto).subscribe((res) => {
       this.logService.log('onLogin res', res);

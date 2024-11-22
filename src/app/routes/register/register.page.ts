@@ -4,26 +4,32 @@ import { LogService, provideLog } from 'src/app/shared/services/log.service';
 import RegisterFormComponent from './register-form.component';
 import { RegisterService } from './register.service';
 
+/**
+ * RegisterPage component
+ * - Routed page for the register process
+ * @requires RegisterService - to send the register request
+ * @requires LogService - to log the register process
+ */
 @Component({
-    selector: 'lab-register',
-    providers: [provideLog('🔏 Register Page')],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [RegisterFormComponent],
-    template: `
+  selector: 'lab-register',
+  providers: [provideLog('🔏 Register Page')],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RegisterFormComponent],
+  template: `
     <h1>🔏 Register</h1>
     <lab-register-form (register)="onRegister($event)" />
-  `
+  `,
 })
 export default class RegisterPage {
-  private logService = inject(LogService);
-  private service = inject(RegisterService);
+  private readonly logService = inject(LogService);
+  private readonly service = inject(RegisterService);
 
   /**
    * On register event handler
    * @param registerDto - RegisterDto
    */
-  onRegister(registerDto: RegisterDto) {
+  protected onRegister(registerDto: RegisterDto) {
     this.logService.log('onRegister', registerDto);
-    this.service.register(registerDto);
+    this.service.register(registerDto).subscribe();
   }
 }

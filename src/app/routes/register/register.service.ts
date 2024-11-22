@@ -1,17 +1,30 @@
 import { inject, Injectable } from '@angular/core';
 import { UsersRepository } from '@api/users.repository';
 import { RegisterDto } from '@models/register.dto';
+import { UserTokenDto } from '@models/user-token.dto';
+import { Observable } from 'rxjs';
 import { LogService } from 'src/app/shared/services/log.service';
 
+/**
+ * RegisterService
+ * - Handles the register process
+ * @requires UsersRepository - to post the register request
+ * @requires LogService - to log the register process
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class RegisterService {
   private usersRepository = inject(UsersRepository);
-  private logService = inject(LogService);
+  private readonly logService = inject(LogService);
 
-  register(dto: RegisterDto) {
+  /**
+   * Sends the register request
+   * @param dto - RegisterDto
+   * @returns Observable<UserTokenDto>
+   */
+  public register(dto: RegisterDto): Observable<UserTokenDto> {
     this.logService.log('register', dto);
-    this.usersRepository.postRegister(dto);
+    return this.usersRepository.postRegister(dto);
   }
 }

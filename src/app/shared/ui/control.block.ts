@@ -3,17 +3,21 @@ import { Component, computed, input, InputSignal, Signal } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { titleCase } from '../utils/string.utils';
 
+/**
+ * ControlBlock component
+ * - Displays a label and the control errors
+ */
 @Component({
-    selector: 'lab-control',
-    imports: [FormsModule, JsonPipe],
-    styles: [
-        `
+  selector: 'lab-control',
+  imports: [FormsModule, JsonPipe],
+  styles: [
+    `
       small {
         color: rgb(175, 66, 64);
       }
     `,
-    ],
-    template: `
+  ],
+  template: `
     <div>
       <label [for]="controlName()">{{ labelCaption() }}</label>
       <ng-content></ng-content>
@@ -21,7 +25,7 @@ import { titleCase } from '../utils/string.utils';
         <small>{{ control().errors | json }}</small>
       }
     </div>
-  `
+  `,
 })
 export class ControlBlock {
   // Input signals
@@ -30,25 +34,25 @@ export class ControlBlock {
    * Label caption
    * - If not provided, control name will be used
    */
-  label: InputSignal<string | undefined> = input<string>();
+  readonly label: InputSignal<string | undefined> = input<string>();
 
   /**
    * NgModel control
    * - the required reference to the NgModel control
    */
-  control: InputSignal<NgModel> = input.required<NgModel>();
+  readonly control: InputSignal<NgModel> = input.required<NgModel>();
 
   // Computed signals
 
   /**
    * Control name
    */
-  controlName: Signal<string> = computed(() => this.control().name);
+  readonly controlName: Signal<string> = computed(() => this.control().name);
 
   /**
    * Computed signal for label caption
    */
-  labelCaption: Signal<string> = computed(
+  readonly labelCaption: Signal<string> = computed(
     () => this.label() || titleCase(this.controlName()),
   );
 }

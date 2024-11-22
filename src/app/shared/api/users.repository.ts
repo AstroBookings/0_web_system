@@ -17,7 +17,7 @@ export class UsersRepository {
    * @param dto - RegisterDto
    * @returns Observable<UserTokenDto>
    */
-  postRegister(dto: RegisterDto): Observable<UserTokenDto> {
+  public postRegister(dto: RegisterDto): Observable<UserTokenDto> {
     console.log('postRegister', dto);
     return of({
       user: {
@@ -35,7 +35,7 @@ export class UsersRepository {
    * @param dto - LoginDto
    * @returns Observable<UserTokenDto>
    */
-  postLogin(dto: LoginDto): Observable<UserTokenDto> {
+  public postLogin(dto: LoginDto): Observable<UserTokenDto> {
     console.log('postLogin', dto);
     return of({
       user: {

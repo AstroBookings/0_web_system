@@ -8,7 +8,8 @@ import { LogService } from 'src/app/shared/services/log.service';
 /**
  * LoginService
  * - Business logic for login
- * @requires UsersRepository
+ * @requires UsersRepository - to post the login request
+ * @requires LogService - to log the login process
  */
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class LoginService {
   private logService = inject(LogService);
 
   /**
-   * POST /login
+   * Sends the login request
    * @param dto - LoginDto
    * @returns Observable<UserTokenDto>
    */

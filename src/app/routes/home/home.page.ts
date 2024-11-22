@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+/**
+ * HomePage component
+ * - Routed page for the home
+ */
 @Component({
   selector: 'lab-home',
   standalone: true,

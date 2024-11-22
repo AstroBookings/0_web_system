@@ -14,13 +14,16 @@ export function provideLog(source: string) {
   return [{ provide: LOG_SOURCE, useValue: source }, LogService];
 }
 
+/**
+ * LogService writes messages to the console prefixed with a source
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class LogService {
   private logSource = inject(LOG_SOURCE);
 
-  log(message: string, ...args: any[]) {
+  public log(message: string, ...args: any[]) {
     console.log(`🔎 [${this.logSource}]: ${message}`, ...args);
   }
 }

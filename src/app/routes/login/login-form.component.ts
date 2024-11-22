@@ -15,10 +15,10 @@ import { ControlBlock } from '@ui/control.block';
  * - Login form
  */
 @Component({
-    selector: 'lab-login-form',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [FormsModule, ControlBlock],
-    template: `
+  selector: 'lab-login-form',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [FormsModule, ControlBlock],
+  template: `
     <form #form="ngForm">
       <fieldset>
         <div>
@@ -51,29 +51,29 @@ import { ControlBlock } from '@ui/control.block';
         Login
       </button>
     </form>
-  `
+  `,
 })
 export default class LoginFormComponent {
   /**
    * On login event
    * - Emits a LoginDto
    */
-  login: OutputEmitterRef<LoginDto> = output<LoginDto>();
+  public readonly login: OutputEmitterRef<LoginDto> = output<LoginDto>();
 
   /**
    * Email
    */
-  email: WritableSignal<string> = signal<string>('');
+  protected readonly email: WritableSignal<string> = signal<string>('');
 
   /**
    * Password
    */
-  password: WritableSignal<string> = signal<string>('');
+  protected readonly password: WritableSignal<string> = signal<string>('');
 
   /**
    * On login click
    */
-  onLoginClick() {
+  protected onLoginClick() {
     const loginDto: LoginDto = {
       email: this.email(),
       password: this.password(),
