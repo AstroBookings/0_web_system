@@ -12,11 +12,10 @@ import { Role } from '@models/role.enum';
 import { ControlBlock } from '@ui/control.block';
 
 @Component({
-  selector: 'lab-register-form',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule, ControlBlock],
-  template: `
+    selector: 'lab-register-form',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, ControlBlock],
+    template: `
     <form #form="ngForm">
       <fieldset>
         <lab-control [control]="nameControl">
@@ -84,7 +83,7 @@ import { ControlBlock } from '@ui/control.block';
         Register
       </button>
     </form>
-  `,
+  `
 })
 export default class RegisterFormComponent {
   /**

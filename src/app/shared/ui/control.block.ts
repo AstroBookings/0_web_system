@@ -4,17 +4,16 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { titleCase } from '../utils/string.utils';
 
 @Component({
-  selector: 'lab-control',
-  standalone: true,
-  imports: [FormsModule, JsonPipe],
-  styles: [
-    `
+    selector: 'lab-control',
+    imports: [FormsModule, JsonPipe],
+    styles: [
+        `
       small {
         color: rgb(175, 66, 64);
       }
     `,
-  ],
-  template: `
+    ],
+    template: `
     <div>
       <label [for]="controlName()">{{ labelCaption() }}</label>
       <ng-content></ng-content>
@@ -22,7 +21,7 @@ import { titleCase } from '../utils/string.utils';
         <small>{{ control().errors | json }}</small>
       }
     </div>
-  `,
+  `
 })
 export class ControlBlock {
   // Input signals

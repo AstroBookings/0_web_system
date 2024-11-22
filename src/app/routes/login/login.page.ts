@@ -10,15 +10,14 @@ import { LoginService } from './login.service';
  * @requires LoginService
  */
 @Component({
-  selector: 'lab-login',
-  standalone: true,
-  providers: [provideLog('🔐 Login Page')],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LoginFormComponent],
-  template: `
+    selector: 'lab-login',
+    providers: [provideLog('🔐 Login Page')],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [LoginFormComponent],
+    template: `
     <h1>🔐 Login</h1>
     <lab-login-form (login)="onLogin($event)" />
-  `,
+  `
 })
 export default class LoginPage {
   private logService = inject(LogService);

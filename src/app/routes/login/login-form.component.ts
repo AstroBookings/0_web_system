@@ -15,11 +15,10 @@ import { ControlBlock } from '@ui/control.block';
  * - Login form
  */
 @Component({
-  selector: 'lab-login-form',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule, ControlBlock],
-  template: `
+    selector: 'lab-login-form',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, ControlBlock],
+    template: `
     <form #form="ngForm">
       <fieldset>
         <div>
@@ -52,7 +51,7 @@ import { ControlBlock } from '@ui/control.block';
         Login
       </button>
     </form>
-  `,
+  `
 })
 export default class LoginFormComponent {
   /**

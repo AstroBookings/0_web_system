@@ -16,11 +16,10 @@ type MenuItem = {
  * - Authentication status
  */
 @Component({
-  selector: 'lab-header',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
-  template: `
+    selector: 'lab-header',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [RouterLink],
+    template: `
     <header>
       <nav>
         <a routerLink="">
@@ -35,7 +34,7 @@ type MenuItem = {
         </section>
       </nav>
     </header>
-  `,
+  `
 })
 export class HeaderComponent {
   /**
