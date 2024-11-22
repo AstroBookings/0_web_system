@@ -24,9 +24,7 @@ export class RegisterService {
    * @returns Observable<UserTokenDto>
    */
   public register(dto: RegisterDto | undefined): Observable<UserTokenDto | undefined> {
-    if (!dto) {
-      return of(undefined);
-    }
+    if (!dto) return of(undefined);
     this.logService.log('register', dto);
     return this.usersRepository.postRegister(dto);
   }

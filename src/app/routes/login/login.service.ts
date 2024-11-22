@@ -24,9 +24,7 @@ export class LoginService {
    * @returns Observable<UserTokenDto>
    */
   login(dto: LoginDto | undefined): Observable<UserTokenDto | undefined> {
-    if (!dto) {
-      return of(undefined);
-    }
+    if (!dto) return of(undefined);
     this.logService.log('login', dto);
     return this.repository.postLogin(dto);
   }
