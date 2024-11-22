@@ -22,8 +22,12 @@ export function provideLog(source: string) {
 })
 export class LogService {
   private logSource = inject(LOG_SOURCE);
-
-  public log(message: string, ...args: any[]) {
+  /**
+   * Logs a message with the source
+   * @param message - The message to log
+   * @param args - The arguments to log
+   */
+  public log(message: string, ...args: unknown[]) {
     console.log(`🔎 [${this.logSource}]: ${message}`, ...args);
   }
 }

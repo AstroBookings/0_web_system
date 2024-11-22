@@ -34,23 +34,23 @@ export class ControlBlock {
    * Label caption
    * - If not provided, control name will be used
    */
-  readonly label: InputSignal<string | undefined> = input<string>();
+  public readonly label: InputSignal<string | undefined> = input<string>();
 
   /**
    * NgModel control
    * - the required reference to the NgModel control
    */
-  readonly control: InputSignal<NgModel> = input.required<NgModel>();
+  public readonly control: InputSignal<NgModel> = input.required<NgModel>();
 
   // Computed signals
 
   /**
    * Control name
    */
-  readonly controlName: Signal<string> = computed(() => this.control().name);
+  protected readonly controlName: Signal<string> = computed(() => this.control().name);
 
   /**
    * Computed signal for label caption
    */
-  readonly labelCaption: Signal<string> = computed(() => this.label() || titleCase(this.controlName()));
+  protected readonly labelCaption: Signal<string> = computed(() => this.label() || titleCase(this.controlName()));
 }
