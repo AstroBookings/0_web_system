@@ -1,8 +1,7 @@
 import { JsonPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, ResourceStatus, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RegisterDto } from '@models/register.dto';
-import { of } from 'rxjs';
 import { LogService, provideLog } from 'src/app/shared/services/log.service';
 import RegisterFormComponent from './register-form.component';
 import { RegisterService } from './register.service';
@@ -21,8 +20,12 @@ import { RegisterService } from './register.service';
   template: `
     <h1>🔏 Register</h1>
     <lab-register-form (register)="register($event)" />
-    <pre>Status: {{ statusText() }}</pre>
-    <pre>Value: {{ registerResource.value() | json }}</pre>
+    @if (registerResource.error()) {
+      <pre>Error: {{ registerResource.error() | json }}</pre>
+    }
+    @if (registerResource.value()) {
+      <pre>Value: {{ registerResource.value() | json }}</pre>
+    }
   `,
 })
 export default class RegisterPage {
@@ -31,14 +34,7 @@ export default class RegisterPage {
   private readonly registerDto = signal<RegisterDto | undefined>(undefined);
 
   protected readonly registerResource = rxResource({
-    request: () => ({ registerDto: this.registerDto() }),
-    loader: (params) => {
-      const registerDto = params.request.registerDto;
-      if (!registerDto) {
-        return of(undefined);
-      }
-      return this.service.register(registerDto);
-    },
+    loader: () => this.service.register(this.registerDto()),
   });
 
   /**
@@ -48,7 +44,6 @@ export default class RegisterPage {
   protected register(registerDto: RegisterDto) {
     this.logService.log('setting register', registerDto);
     this.registerDto.set(registerDto);
+    this.registerResource.reload();
   }
-
-  protected statusText = computed(() => ResourceStatus[this.registerResource.status()]);
 }

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { LoginDto } from '@models/login.dto';
 import { UserTokenDto } from '@models/user-token.dto';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UsersRepository } from 'src/app/shared/api/users.repository';
 import { LogService } from 'src/app/shared/services/log.service';
 
@@ -23,7 +23,10 @@ export class LoginService {
    * @param dto - LoginDto
    * @returns Observable<UserTokenDto>
    */
-  login(dto: LoginDto): Observable<UserTokenDto> {
+  login(dto: LoginDto | undefined): Observable<UserTokenDto | undefined> {
+    if (!dto) {
+      return of(undefined);
+    }
     this.logService.log('login', dto);
     return this.repository.postLogin(dto);
   }

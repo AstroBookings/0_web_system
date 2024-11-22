@@ -1,8 +1,7 @@
 import { JsonPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, ResourceStatus, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { LoginDto } from '@models/login.dto';
-import { of } from 'rxjs';
 import { LogService, provideLog } from 'src/app/shared/services/log.service';
 import LoginFormComponent from './login-form.component';
 import { LoginService } from './login.service';
@@ -21,8 +20,12 @@ import { LoginService } from './login.service';
   template: `
     <h1>🔐 Login</h1>
     <lab-login-form (login)="onLogin($event)" />
-    <pre>Status: {{ statusText() }}</pre>
-    <pre>Value: {{ loginResource.value() | json }}</pre>
+    @if (loginResource.error()) {
+      <pre>Error: {{ loginResource.error() | json }}</pre>
+    }
+    @if (loginResource.value()) {
+      <pre>Value: {{ loginResource.value() | json }}</pre>
+    }
   `,
 })
 export default class LoginPage {
@@ -31,14 +34,7 @@ export default class LoginPage {
   private readonly loginDto = signal<LoginDto | undefined>(undefined);
 
   protected readonly loginResource = rxResource({
-    request: () => ({ loginDto: this.loginDto() }),
-    loader: (params) => {
-      const loginDto = params.request.loginDto;
-      if (!loginDto) {
-        return of(undefined);
-      }
-      return this.service.login(loginDto);
-    },
+    loader: () => this.service.login(this.loginDto()),
   });
 
   /**
@@ -48,6 +44,6 @@ export default class LoginPage {
   protected onLogin(dto: LoginDto) {
     this.logService.log('onLogin', dto);
     this.loginDto.set(dto);
+    this.loginResource.reload();
   }
-  protected statusText = computed(() => ResourceStatus[this.loginResource.status()]);
 }

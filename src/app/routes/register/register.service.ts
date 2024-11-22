@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { UsersRepository } from '@api/users.repository';
 import { RegisterDto } from '@models/register.dto';
 import { UserTokenDto } from '@models/user-token.dto';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { LogService } from 'src/app/shared/services/log.service';
 
 /**
@@ -23,7 +23,10 @@ export class RegisterService {
    * @param dto - RegisterDto
    * @returns Observable<UserTokenDto>
    */
-  public register(dto: RegisterDto): Observable<UserTokenDto> {
+  public register(dto: RegisterDto | undefined): Observable<UserTokenDto | undefined> {
+    if (!dto) {
+      return of(undefined);
+    }
     this.logService.log('register', dto);
     return this.usersRepository.postRegister(dto);
   }
