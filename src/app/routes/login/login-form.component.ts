@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  output,
-  OutputEmitterRef,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, OutputEmitterRef, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoginDto } from '@models/login.dto';
 import { ControlBlock } from '@ui/control.block';
@@ -23,15 +16,7 @@ import { ControlBlock } from '@ui/control.block';
       <fieldset>
         <div>
           <lab-control [control]="emailControl">
-            <input
-              [(ngModel)]="email"
-              #emailControl="ngModel"
-              type="email"
-              id="email"
-              name="email"
-              required
-              email
-            />
+            <input [(ngModel)]="email" #emailControl="ngModel" type="email" id="email" name="email" required email />
           </lab-control>
         </div>
         <div>
@@ -47,9 +32,7 @@ import { ControlBlock } from '@ui/control.block';
           </lab-control>
         </div>
       </fieldset>
-      <button type="button" (click)="onLoginClick()" [disabled]="form.invalid">
-        Login
-      </button>
+      <button type="button" (click)="sendLoginDto()" [disabled]="form.invalid">Login</button>
     </form>
   `,
 })
@@ -73,7 +56,7 @@ export default class LoginFormComponent {
   /**
    * On login click
    */
-  protected onLoginClick() {
+  protected sendLoginDto() {
     const loginDto: LoginDto = {
       email: this.email(),
       password: this.password(),

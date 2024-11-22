@@ -16,25 +16,27 @@ type MenuItem = {
  * - Authentication status
  */
 @Component({
-    selector: 'lab-header',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [RouterLink],
-    template: `
+  selector: 'lab-header',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink],
+  template: `
     <header>
       <nav>
         <a routerLink="">
           <b>{{ title }}</b>
         </a>
         <section>
-          @for (item of menu; track item.link) { @if (canLink(item)) {
-          <span>
-            <a [routerLink]="item.link">{{ item.title }}</a>
-          </span>
-          } }
+          @for (item of menu; track item.link) {
+            @if (canLink(item)) {
+              <span>
+                <a [routerLink]="item.link">{{ item.title }}</a>
+              </span>
+            }
+          }
         </section>
       </nav>
     </header>
-  `
+  `,
 })
 export class HeaderComponent {
   /**

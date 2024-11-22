@@ -26,26 +26,10 @@ import { ControlBlock } from '@ui/control.block';
     <form #form="ngForm">
       <fieldset>
         <lab-control [control]="nameControl">
-          <input
-            [(ngModel)]="name"
-            #nameControl="ngModel"
-            type="text"
-            id="name"
-            name="name"
-            required
-            minlength="3"
-          />
+          <input [(ngModel)]="name" #nameControl="ngModel" type="text" id="name" name="name" required minlength="3" />
         </lab-control>
         <lab-control [control]="emailControl">
-          <input
-            [(ngModel)]="email"
-            #emailControl="ngModel"
-            type="email"
-            id="email"
-            name="email"
-            required
-            email
-          />
+          <input [(ngModel)]="email" #emailControl="ngModel" type="email" id="email" name="email" required email />
         </lab-control>
         <lab-control [control]="passwordControl">
           <input
@@ -70,25 +54,14 @@ import { ControlBlock } from '@ui/control.block';
           />
         </lab-control>
         <lab-control [control]="roleControl">
-          <select
-            id="role"
-            name="role"
-            [(ngModel)]="role"
-            #roleControl="ngModel"
-          >
+          <select id="role" name="role" [(ngModel)]="role" #roleControl="ngModel">
             <option value="admin" selected>Admin</option>
             <option value="agency">Agency</option>
             <option value="traveler">Traveler</option>
           </select>
         </lab-control>
       </fieldset>
-      <button
-        type="button"
-        (click)="sendRegisterDto()"
-        [disabled]="form.invalid"
-      >
-        Register
-      </button>
+      <button type="button" (click)="sendRegisterDto()" [disabled]="form.invalid">Register</button>
     </form>
   `,
 })
@@ -111,21 +84,18 @@ export default class RegisterFormComponent {
   /**
    * Confirm password
    */
-  protected readonly confirmPassword: WritableSignal<string> =
-    signal<string>('');
+  protected readonly confirmPassword: WritableSignal<string> = signal<string>('');
 
   /**
    * Role
    */
-  protected readonly role: WritableSignal<'admin' | 'agency' | 'traveler'> =
-    signal<'admin'>('admin');
+  protected readonly role: WritableSignal<'admin' | 'agency' | 'traveler'> = signal<'admin'>('admin');
 
   /**
    * Confirm password control
    * - required signal to access to template variable #confirmPasswordControl
    */
-  protected readonly confirmPasswordControl: Signal<NgModel> =
-    viewChild.required<NgModel>('confirmPasswordControl');
+  protected readonly confirmPasswordControl: Signal<NgModel> = viewChild.required<NgModel>('confirmPasswordControl');
 
   private passwordMatchValidatorEffect = effect(() => {
     // signal triggers
@@ -144,8 +114,7 @@ export default class RegisterFormComponent {
    * On register event
    * - Emits a RegisterDto
    */
-  public readonly register: OutputEmitterRef<RegisterDto> =
-    output<RegisterDto>();
+  public readonly register: OutputEmitterRef<RegisterDto> = output<RegisterDto>();
 
   /**
    * On register click event handler

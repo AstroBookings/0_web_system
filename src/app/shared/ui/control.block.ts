@@ -52,7 +52,5 @@ export class ControlBlock {
   /**
    * Computed signal for label caption
    */
-  readonly labelCaption: Signal<string> = computed(
-    () => this.label() || titleCase(this.controlName()),
-  );
+  readonly labelCaption: Signal<string> = computed(() => this.label() || titleCase(this.controlName()));
 }
