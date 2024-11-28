@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { LoginDto } from '@models/login.dto';
 import { LogService, provideLog } from 'src/app/shared/services/log.service';
@@ -31,10 +31,15 @@ import { LoginService } from './login.service';
 export default class LoginPage {
   private readonly logService = inject(LogService);
   private readonly service = inject(LoginService);
-  private readonly loginDto = signal<LoginDto | undefined>(undefined);
+  private loginDto: LoginDto | undefined = undefined;
 
+  /**
+   * Login resource
+   * - RxResource for calling an observable
+   * - Sets the value, the error and the loading state
+   */
   protected readonly loginResource = rxResource({
-    loader: () => this.service.login(this.loginDto()),
+    loader: () => this.service.login(this.loginDto),
   });
 
   /**
@@ -43,7 +48,7 @@ export default class LoginPage {
    */
   protected onLogin(dto: LoginDto) {
     this.logService.log('onLogin', dto);
-    this.loginDto.set(dto);
+    this.loginDto = dto;
     this.loginResource.reload();
   }
 }

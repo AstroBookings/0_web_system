@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   output,
   OutputEmitterRef,
@@ -12,59 +13,92 @@ import {
 import { FormsModule, NgModel } from '@angular/forms';
 import { RegisterDto } from '@models/register.dto';
 import { Role } from '@models/role.enum';
-import { ControlBlock } from '@ui/control.block';
 import { PasswordValidatorDirective } from '@ui/password-validator.directive';
 
 /**
  * RegisterFormComponent
  * - Form component for the register process
+ * @requires PasswordValidatorDirective - to validate the password strength
  */
 @Component({
   selector: 'lab-register-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule, ControlBlock, PasswordValidatorDirective],
+  imports: [FormsModule,  PasswordValidatorDirective],
   template: `
     <form #form="ngForm">
       <fieldset>
-        <lab-control [control]="nameControl">
-          <input [(ngModel)]="name" #nameControl="ngModel" type="text" id="name" name="name" required minlength="3" />
-        </lab-control>
-        <lab-control [control]="emailControl">
-          <input [(ngModel)]="email" #emailControl="ngModel" type="email" id="email" name="email" required email />
-        </lab-control>
-        <lab-control [control]="passwordControl">
+            <form #f="ngForm">
+      <fieldset>
+        <section>
+          <label for="username">User name</label>
           <input
-            [(ngModel)]="password"
-            #passwordControl="ngModel"
-            type="password"
+            id="username"
+            name="username"
+            type="text"
+            placeholder="User name"
+            [(ngModel)]="name"
+            #usernameModel="ngModel"
+            required
+            minlength="3"
+            labPasswordValidator
+            [attr.aria-invalid]="modelInvalid(usernameModel)"
+          />
+          @if(modelInvalid(usernameModel)){
+          <small>User name must be at least 3 characters long</small>
+          }
+        </section>
+        <section>
+          <label for="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Email"
+            [(ngModel)]="email"
+            #emailModel="ngModel"
+            required
+            email
+            [attr.aria-invalid]="modelInvalid(emailModel)"
+          />
+          @if(modelInvalid(emailModel)){
+          <small>Invalid email</small>
+          }
+        </section>
+        <section>
+          <label for="password">Password</label>
+          <input
             id="password"
             name="password"
+            type="password"
+            placeholder="Password"
+            [(ngModel)]="password"
+            #passwordModel="ngModel"
             required
             minlength="4"
-            labPasswordValidator
+            [attr.aria-invalid]="modelInvalid(passwordModel)"
           />
-        </lab-control>
-        <lab-control [control]="confirmPasswordControl">
+          @if(modelInvalid(passwordModel)){
+          <small>Password must be at least 4 characters long</small>
+          }
+        </section>
+        <section>
+          <label for="confirmPassword">Confirm Password</label>
           <input
-            [(ngModel)]="confirmPassword"
-            #confirmPasswordControl="ngModel"
-            type="password"
             id="confirmPassword"
             name="confirmPassword"
-            required
-            minlength="6"
+            type="password"
+            placeholder="Confirm Password"
+            [(ngModel)]="confirmPassword"
+            #confirmPasswordModel="ngModel"
+            [attr.aria-invalid]="modelInvalid(confirmPasswordModel)"
           />
-        </lab-control>
-        <lab-control [control]="roleControl">
-          <select id="role" name="role" [(ngModel)]="role" #roleControl="ngModel">
-            <option value="admin" selected>Admin</option>
-            <option value="agency">Agency</option>
-            <option value="traveler">Traveler</option>
-          </select>
-        </lab-control>
+        </section>
       </fieldset>
-      <button type="button" (click)="submitRegisterDto()" [disabled]="form.invalid">Register</button>
+      <button type="submit" [disabled]="f.invalid" (click)="submitRegisterDto()">
+        Register
+      </button>
     </form>
+      
   `,
 })
 export default class RegisterFormComponent {
@@ -94,10 +128,25 @@ export default class RegisterFormComponent {
   protected readonly role: WritableSignal<'admin' | 'agency' | 'traveler'> = signal<'admin'>('admin');
 
   /**
+   * Check if a model is touched and has errors
+   * @param model - NgModel
+   * @returns boolean | undefined - true if the model is touched and has errors, undefined otherwise
+   */
+  protected modelInvalid(model: NgModel): boolean | undefined {
+    if (!model.touched) return undefined;
+    return model.invalid === true;
+  }
+
+  /**
    * Confirm password control
    * - required signal to access to template variable #confirmPasswordControl
    */
   protected readonly confirmPasswordControl: Signal<NgModel> = viewChild.required<NgModel>('confirmPasswordControl');
+
+  /**
+   * Password matches
+   */
+  protected readonly passwordMatches = computed(() => this.password() === this.confirmPassword());
 
   /**
    * Validation implementation as an effect
@@ -105,14 +154,15 @@ export default class RegisterFormComponent {
   private passwordMatchValidatorEffect = effect(() => {
     // signal triggers
     const confirmPasswordControl = this.confirmPasswordControl();
-    const password = this.password();
-    const confirmPassword = this.confirmPassword();
+    const passwordMatches = this.passwordMatches();
+    let errors = null;
     // logic with effects
-    if (password !== confirmPassword) {
-      confirmPasswordControl.control.setErrors({ mismatch: true });
+    if (passwordMatches) {
+      errors = null;
     } else {
-      confirmPasswordControl.control.setErrors(null);
+      errors = { mismatch: true };
     }
+    confirmPasswordControl.control.setErrors(errors);
   });
 
   /**

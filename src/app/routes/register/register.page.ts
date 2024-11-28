@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RegisterDto } from '@models/register.dto';
 import { LogService, provideLog } from 'src/app/shared/services/log.service';
@@ -31,10 +31,15 @@ import { RegisterService } from './register.service';
 export default class RegisterPage {
   private readonly logService = inject(LogService);
   private readonly service = inject(RegisterService);
-  private readonly registerDto = signal<RegisterDto | undefined>(undefined);
+  private registerDto: RegisterDto | undefined = undefined;
 
+  /**
+   * Register resource
+   * - RxResource for calling an observable
+   * - Sets the value, the error and the loading state
+   */
   protected readonly registerResource = rxResource({
-    loader: () => this.service.register(this.registerDto()),
+    loader: () => this.service.register(this.registerDto),
   });
 
   /**
@@ -43,7 +48,7 @@ export default class RegisterPage {
    */
   protected register(registerDto: RegisterDto) {
     this.logService.log('setting register', registerDto);
-    this.registerDto.set(registerDto);
+    this.registerDto = registerDto;
     this.registerResource.reload();
   }
 }

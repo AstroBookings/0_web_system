@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, output, OutputEmitterRef, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, OutputEmitterRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoginDto } from '@models/login.dto';
 import { ControlBlock } from '@ui/control.block';
@@ -16,17 +16,17 @@ import { ControlBlock } from '@ui/control.block';
       <fieldset>
         <div>
           <lab-control [control]="emailControl">
-            <input [(ngModel)]="email" #emailControl="ngModel" type="email" id="email" name="email" required email />
+            <input type="email" id="email" name="email" [(ngModel)]="email" #emailControl="ngModel" required email />
           </lab-control>
-        </div>
+        </div>  
         <div>
           <lab-control [control]="passwordControl">
             <input
-              [(ngModel)]="password"
-              #passwordControl="ngModel"
-              type="password"
-              id="password"
-              name="password"
+            type="password"
+            id="password"
+            name="password"
+            [(ngModel)]="password"
+            #passwordControl="ngModel"
               required
             />
           </lab-control>
@@ -46,20 +46,20 @@ export default class LoginFormComponent {
   /**
    * Email
    */
-  protected readonly email: WritableSignal<string> = signal<string>('');
+  protected email: string = '';
 
   /**
    * Password
    */
-  protected readonly password: WritableSignal<string> = signal<string>('');
+  protected password: string = '';
 
   /**
    * On login click
    */
   protected sendLoginDto() {
     const loginDto: LoginDto = {
-      email: this.email(),
-      password: this.password(),
+      email: this.email,
+      password: this.password,
     };
     console.log('onLoginClick', loginDto);
     this.login.emit(loginDto);
